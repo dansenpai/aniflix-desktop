@@ -1,0 +1,15 @@
+.search-input{
+  height: 90px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #F44336;
+  outline: none;
+  width: 100%;
+  color: #FFF;
+  font-size: 30px;
+  text-align: center;
+} 
+
+.search-input-wrapper{
+  margin-left: 300px;
+}

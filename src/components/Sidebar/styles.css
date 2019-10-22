@@ -1,0 +1,41 @@
+.sidebar-wrapper{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 300px;
+  background: #373B44;  /* fallback for old browsers */
+  height: 100%;
+}
+
+.sidebar-wrapper .menu ul{
+  list-style-type: none;
+}
+
+.sidebar-wrapper .menu > ul > li{
+  font-size: 20px;
+  padding: 20px 0;
+}
+
+.sidebar-wrapper .logo{
+  background: #F44336;  /* fallback for old browsers */
+  text-align: center;
+  padding: 30px;
+}
+
+.sidebar-wrapper .logo > a > span{
+  font-size: 30px;
+  font-weight: bold;
+}
+
+a {
+  text-decoration: none;
+  color: #eee;
+  font-weight: bold;
+}
+
+.image-render{
+  position: absolute;
+  bottom: 0;
+  object-fit: cover;
+  width: 300px;
+}
