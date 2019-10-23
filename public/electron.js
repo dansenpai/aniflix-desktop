@@ -1,47 +1,53 @@
-const {app, BrowserWindow, ipcMain} = require('electron');
-const path = require('path');
-const isDev = require('electron-is-dev');
-const {autoUpdater} = require("electron-updater");
+const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("path");
+const isDev = require("electron-is-dev");
+const { autoUpdater } = require("electron-updater");
 
 let mainWindow;
 
 function createWindow() {
-  mainWindow = new BrowserWindow({width: 900, height: 680, minWidth: 600, minHeight: 460, frame: false});
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`); // load the react app
-  mainWindow.on('closed', () => mainWindow = null);
+  mainWindow = new BrowserWindow({
+    width: 900,
+    height: 680,
+    minWidth: 800,
+    minHeight: 650,
+    frame: false
+  });
+  mainWindow.loadURL(
+    isDev
+      ? "http://localhost:3000"
+      : `file://${path.join(__dirname, "../build/index.html")}`
+  ); // load the react app
+  mainWindow.on("closed", () => (mainWindow = null));
   mainWindow.setMenuBarVisibility(false);
 }
 
-  // when the app is loaded create a BrowserWindow and check for updates
-  app.on('ready', function() {
-    createWindow()
-    if (!isDev) autoUpdater.checkForUpdates();
-  });
-
-
+// when the app is loaded create a BrowserWindow and check for updates
+app.on("ready", function() {
+  createWindow();
+  if (!isDev) autoUpdater.checkForUpdates();
+});
 
 // on MacOS leave process running also with no windows
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
     app.quit();
   }
 });
 
 // if there are no windows create one
-app.on('activate', () => {
+app.on("activate", () => {
   if (mainWindow === null) {
     createWindow();
   }
 });
 
+// when the update has been downloaded and is ready to be installed, notify the BrowserWindow
+autoUpdater.on("update-downloaded", info => {
+  mainWindow.webContents.send("updateReady");
+});
 
-  // when the update has been downloaded and is ready to be installed, notify the BrowserWindow
-  autoUpdater.on('update-downloaded', (info) => {
-      mainWindow.webContents.send('updateReady')
-  });
-
-  // when receiving a quitAndInstall signal, quit and install the new version ;)
-  ipcMain.on("quitAndInstall", (event, arg) => {
-      autoUpdater.quitAndInstall();
-  })
-
+// when receiving a quitAndInstall signal, quit and install the new version ;)
+ipcMain.on("quitAndInstall", (event, arg) => {
+  autoUpdater.quitAndInstall();
+});

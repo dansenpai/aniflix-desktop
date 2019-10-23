@@ -1,0 +1,23 @@
+.episodio-list{
+}
+
+.episodio-list-item{
+  display: flex;
+  align-items: center;
+  height: 60px;
+  color: #fff;
+  border-bottom: 1px solid red;
+  cursor: pointer;
+}
+
+.episodio-list-item:hover{
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.episodio-list-item.active{
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.episodio-list-item img{
+  height: 60px;
+}
