@@ -39,13 +39,10 @@ export const getMoreViewed = () => {
 
 export const getAnimeById = (id) => {
   return new Promise((resolve, reject) => {
-    axios.get(url_base + `odata/Animesdb?$filter=Id%20eq%20${id}`)
-    .then(anime => {
-      axios.get(url_base + 'api/episodioexes/' + anime.data.value[0].Id)
-      .then(episodios => {
-        resolve({anime: anime.data, episodios: episodios. data});
-      }).catch(erro => reject(erro));
-    });
+    axios.get(url_base + `anime/${id}`)
+    .then(response => {
+      resolve({anime: response.data.anime.value[0], episodios: response.data.episodios});
+    }).catch(erro => reject(erro));
   });
 };
 
@@ -70,7 +67,7 @@ export const searchByName = (name, skip = 0) => {
 
 export const getLinkByEpisodeId = (id) => {
   return  new Promise((resolve, reject) => {
-    axios.get(url_base + 'api/episodioexes/links?id='+id)
+    axios.get(url_base + 'links/'+id)
     .then(response => {
       resolve(response.data);
     }).catch(erro => reject(erro));

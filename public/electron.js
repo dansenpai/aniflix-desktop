@@ -6,7 +6,7 @@ const {autoUpdater} = require("electron-updater");
 let mainWindow;
 
 function createWindow() {
-  mainWindow = new BrowserWindow({width: 900, height: 680});
+  mainWindow = new BrowserWindow({width: 900, height: 680, minWidth: 600, minHeight: 460, frame: false});
   mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`); // load the react app
   mainWindow.on('closed', () => mainWindow = null);
   mainWindow.setMenuBarVisibility(false);

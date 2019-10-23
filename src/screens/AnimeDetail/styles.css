@@ -1,0 +1,83 @@
+.container-player{
+  padding: 1.5em;
+  margin-left: 300px;
+  display: flex;
+}
+
+.player-padding {
+  padding: 20px;
+}
+
+.player-content {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.player-content select{
+  margin-bottom: 20px;
+  width: 200px;
+  height: 30px;
+  border: none;
+}
+
+.next-button{
+  cursor: pointer;
+  background-color: #F44336;
+  padding: 20px;
+  max-width: 80px;
+  border-radius: 10px;
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+.buttons {
+  display: flex;
+}
+
+.video-player {
+  transition: 0.4s ease-out;
+  height: auto;
+  width: 640px;
+}
+
+.anime-detail{
+  display: flex;
+  margin-top: 20px;
+  width: 300px;
+  flex-direction: column;
+}
+
+.imagem{
+  margin-bottom: 20px;
+}
+
+.description {
+  font-size: 15px;
+  padding: 0;
+  margin: 0;
+  text-align: justify;
+}
+
+.episodios {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(7, minmax(120px, 1fr));
+  color: #444;
+}
+
+.anime-square{
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  max-width: 130px;
+  margin: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  transition: 0.4s ease-out;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+}
+
+.anime-square img{
+  width: 100%;
+}
