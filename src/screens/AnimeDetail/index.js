@@ -19,6 +19,8 @@ const tabList = [
 class AnimeDetail extends React.Component {
   constructor(props) {
     super(props);
+    this.player = {};
+    this.interval;
     this.state = {
       anime: {
         Imagem: "",
@@ -47,16 +49,34 @@ class AnimeDetail extends React.Component {
     this.setState({ anime: anime.anime, episodios: anime.episodios });
   }
 
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+  
   async playEpisodio(episodio, index) {
     const episodioLinks = await getLinkByEpisodeId(episodio.Id);
     this.setState({
       playing: true,
       episodioLinks,
-      activeLink: episodioLinks[0].Endereco,
+      activeLink: episodioLinks[1] && episodioLinks[1].Endereco ? episodioLinks[1].Endereco :  episodioLinks[0].Endereco,
       activeEpisodio: episodio,
       episodeIndex: index,
       showModal: true
     });
+    this.player.load(this.state.activeLink);
+    this.getEnd();
+    
+  }
+
+  getEnd() {
+    this.interval = setInterval(() => {
+      console.log('iniciada contagem')
+      if(this.player.getState().player.ended){
+        this.nextEpisode();
+        clearInterval(this.interval);
+        console.log('removida contagem');
+      }
+    }, 1000);
   }
 
   nextEpisode() {
@@ -65,6 +85,7 @@ class AnimeDetail extends React.Component {
       return false;
     }
     this.playEpisodio(this.state.episodios[index], index);
+    this.player.load(this.state.activeLink);
   }
 
   backEpisode() {
@@ -73,11 +94,13 @@ class AnimeDetail extends React.Component {
       return false;
     }
     this.playEpisodio(this.state.episodios[index], index);
+    this.player.load(this.state.activeLink);
   }
 
   changeQuality(event) {
     const item = event.target.value;
     this.setState({ activeLink: item });
+    this.player.load(this.state.activeLink);
   }
 
   renderTab() {
@@ -97,11 +120,12 @@ class AnimeDetail extends React.Component {
   }
 
   handleClose() {
+    this.player.pause();
     this.setState({ showModal: false });
   }
 
   render() {
-    const { anime, activeTab, activeLink, showModal } = this.state;
+    const { anime, activeTab, showModal } = this.state;
     return (
       <BaseScreen>
         <div className="anime-title">
@@ -155,8 +179,11 @@ class AnimeDetail extends React.Component {
                 <h2 className="subtitle has-text-white">
                   {this.state.activeEpisodio.Nome}
                 </h2>
-                <Player>
-                  <source src={activeLink} />
+                <Player
+                  autoPlay
+                  ref={(player) => this.player = player}
+                >
+                  <source src={this.state.activeLink} />
                 </Player>
                 <br></br>
                 <div className="control-buttons">
