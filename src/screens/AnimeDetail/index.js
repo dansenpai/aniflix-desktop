@@ -1,19 +1,19 @@
 import React from "react";
-import Sidebar from "../../components/Sidebar";
 import { Link, withRouter } from "react-router-dom";
-import { getAnimeById, getLinkByEpisodeId } from "../../requests/animes";
+import { getAnimeById, getLinkByEpisodeId, getAnilistData } from "../../requests/animes";
 import BaseScreen from "../../components/BaseScreen";
 import Episodios from "../../components/Episodios";
 import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import { Player } from "video-react";
 import "./styles.css";
 
 const tabList = [
   { name: "episodios", label: "Episódios" },
-  { name: "personagens", label: "Personagens" },
-  { name: "galeria", label: "Galeria" },
-  { name: "comentarios", label: "Comentários" }
+  // { name: "personagens", label: "Personagens" },
+  // { name: "galeria", label: "Galeria" },
+  // { name: "comentarios", label: "Comentários" }
 ];
 
 class AnimeDetail extends React.Component {
@@ -33,7 +33,20 @@ class AnimeDetail extends React.Component {
       activeLink: "",
       playing: false,
       activeTab: "episodios",
-      showModal: false
+      showModal: false,
+      anilist: {
+        startDate: {
+          year: '',
+        },
+        episodes: '',
+        coverImage: {
+          large: '',
+          extraLarge: ''
+        },
+        title: {
+          native: ''
+        }
+      }
     };
 
     this.changeQuality = this.changeQuality.bind(this);
@@ -41,12 +54,14 @@ class AnimeDetail extends React.Component {
     this.backEpisode = this.backEpisode.bind(this);
     this.playEpisodio = this.playEpisodio.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.skipOpening = this.skipOpening.bind(this);
   }
 
   async componentDidMount() {
     const { id } = this.props.match.params;
     const anime = await getAnimeById(id);
-    this.setState({ anime: anime.anime, episodios: anime.episodios });
+    const anilist = await getAnilistData(anime.anime.Nome);
+    this.setState({ anime: anime.anime, episodios: anime.episodios, anilist });
   }
 
   componentWillUnmount() {
@@ -70,11 +85,9 @@ class AnimeDetail extends React.Component {
 
   getEnd() {
     this.interval = setInterval(() => {
-      console.log('iniciada contagem')
       if(this.player.getState().player.ended){
         this.nextEpisode();
         clearInterval(this.interval);
-        console.log('removida contagem');
       }
     }, 1000);
   }
@@ -123,28 +136,38 @@ class AnimeDetail extends React.Component {
     this.player.pause();
     this.setState({ showModal: false });
   }
+  
+  skipOpening(){
+    this.player.forward('87');
+  }
 
   render() {
-    const { anime, activeTab, showModal } = this.state;
+    const { anime, activeTab, showModal, anilist } = this.state;
     return (
       <BaseScreen>
         <div className="anime-title">
           <Link className="back-button" to="/">
             <FaChevronLeft />
           </Link>
-          <h1 className="title has-text-white">{anime.Nome}</h1>
+          <h1 className="title has-text-white">{anime.Nome} - {anilist.title.native}</h1>
         </div>
 
         <div className="anime-detail-content columns is-mobile is-multiline">
           <div className="column is-3-desktop is-5-tablet is-12-mobile">
             <div className="anime-detail">
-              <img className="anime-detail-image" src={anime.Imagem} />
+              <img className="anime-detail-image" src={anilist.coverImage.extraLarge || anime.Imagem} />
+              
+              <div>
+                <span>Ano: </span><span>{anilist.startDate.year}</span>
+                <span>Episódios: </span><span>{anilist.episodes}</span>
+              </div>
+
               <p className="description">{anime.Desc}</p>
             </div>
           </div>
 
           <div className="column is-9-desktop is-7-tablet is-12-mobile">
-            <div className="tabs is-medium">
+            <div className="tabs is-medium is-boxed">
               <ul>
                 {tabList.map(tab => (
                   <li
@@ -192,6 +215,13 @@ class AnimeDetail extends React.Component {
                       <FaChevronLeft />
                     </span>
                     <span>Anterior</span>
+                  </button>
+
+                  <button className="button is-info" onClick={this.skipOpening}>
+                    <span>Pular 1:30 min</span>
+                    <span className="icon">
+                      <FaChevronRight />
+                    </span>
                   </button>
 
                   <button

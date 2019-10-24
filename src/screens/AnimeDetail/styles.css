@@ -1,9 +1,14 @@
 .anime-title {
   display: flex;
   align-items: center;
+  position: fixed;
+  background: #222;
+  width: 100%;
+  top: 30px;
+  padding: 10px 0;
 }
 .anime-detail-content{
-  margin-top: 20px !important;
+  margin-top: 60px !important;
 }
 
 .anime-detail-image{
@@ -48,4 +53,22 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+.action-buttons{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.action-buttons i {
+  color: red;
+  font-weight: bold !important;
+}
+
+.label-vote {
+  background: #111;
+  margin-bottom: 10px;
+  padding: 5px;
 }

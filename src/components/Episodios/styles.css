@@ -4,10 +4,10 @@
 .episodio-list-item{
   display: flex;
   align-items: center;
-  height: 60px;
   color: #fff;
-  border-bottom: 1px solid red;
+  /* border-bottom: 0.1px solid red !important; */
   cursor: pointer;
+  padding: 10px 0px;
 }
 
 .episodio-list-item:hover{
@@ -19,5 +19,6 @@
 }
 
 .episodio-list-item img{
-  height: 60px;
+  height: 40px;
+  margin-right: 20px;
 }
