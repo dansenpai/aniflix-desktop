@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "concurrently": "^3.5.0",
-    "electron": "^1.7.5",
+    "electron": "^9.1.0",
     "electron-builder": "^19.20.1",
     "husky": "^0.14.3",
     "lint-staged": "^4.2.3",
